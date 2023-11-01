@@ -1,6 +1,6 @@
 set(CMAKE_PREFIX_PATH "~/Qt/6.4.3/gcc_64/bin/" CACHE PATH "Path to Qt")
 
-find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Core Concurrent OpenGLWidgets PrintSupport Svg Widgets)
+find_package(QT NAMES Qt6 REQUIRED COMPONENTS Core Concurrent OpenGLWidgets PrintSupport Svg Widgets)
 find_package(Qt6 REQUIRED COMPONENTS Concurrent Core OpenGLWidgets PrintSupport Svg Widgets)
 
 qt_add_library(qwt STATIC)
@@ -26,6 +26,7 @@ target_link_libraries(qwt
                Qt6::Core
                Qt6::OpenGLWidgets
        PRIVATE
+               Qt6::Widgets
                Qt6::Concurrent
                Qt6::PrintSupport
                Qt6::Svg
