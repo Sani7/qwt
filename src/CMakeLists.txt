@@ -15,10 +15,12 @@ target_include_directories(qwt
   ${PROJECT_BINARY_DIR}
 )
 
-file(GLOB_RECURSE TEST_SOURCES "*.cpp")
+file(GLOB_RECURSE QWT_SOURCES "*.cpp")
+file(GLOB_RECURSE QWT_HEADERS "*.hpp" ".h")
 target_sources(qwt
   PRIVATE
-  ${TEST_SOURCES}
+  ${QWT_SOURCES}
+  ${QWT_HEADERS}
 )
 
 target_link_libraries(qwt
