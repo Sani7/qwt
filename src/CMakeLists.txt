@@ -11,6 +11,10 @@ set_target_properties(
         AUTOMOC ON
         AUTORCC ON
 )
+target_compile_definitions(qwt
+    PRIVATE
+    "QWT_MOC_INCLUDE"
+)
 
 
 target_include_directories(qwt
