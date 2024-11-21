@@ -53,7 +53,7 @@ namespace
         virtual QString domXml() const QWT_OVERRIDE { return m_domXml; }
         virtual QString includeFile() const QWT_OVERRIDE { return m_include; }
         virtual QString name() const QWT_OVERRIDE { return m_name; }
-        virtual QString toolTip() const { return m_toolTip; }
+        virtual QString toolTip() const QWT_OVERRIDE { return m_toolTip; }
         virtual QString whatsThis() const QWT_OVERRIDE { return m_whatsThis; }
 
       protected:
@@ -521,7 +521,7 @@ namespace
             qDeleteAll( m_plugins );
         }
 
-        QList< QDesignerCustomWidgetInterface* > customWidgets() const
+        QList< QDesignerCustomWidgetInterface* > customWidgets() const QWT_OVERRIDE
         {
             return m_plugins;
         }
