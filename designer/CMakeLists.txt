@@ -22,6 +22,13 @@ else()
     add_definitions(-DQT_SHARED)
     add_definitions(-DQDESIGNER_EXPORT_WIDGETS)
 
+    set_target_properties(
+        qwt_designer
+        PROPERTIES
+            AUTOMOC ON
+            AUTORCC ON
+    )
+
     target_sources(qwt_designer
       PRIVATE
       qwt_designer_plugin.cpp
