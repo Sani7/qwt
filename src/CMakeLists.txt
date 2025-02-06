@@ -1,5 +1,3 @@
-set(CMAKE_PREFIX_PATH "~/Qt/6.4.3/gcc_64/bin/" CACHE PATH "Path to Qt")
-
 find_package(QT NAMES Qt6 REQUIRED COMPONENTS Core Concurrent OpenGLWidgets PrintSupport Svg Widgets)
 find_package(Qt6 REQUIRED COMPONENTS Concurrent Core OpenGLWidgets PrintSupport Svg Widgets)
 
