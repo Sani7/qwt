@@ -42,7 +42,7 @@ else()
             Qt6::UiPlugin
             Qt6::Widgets
             Qt6::Designer
-            qwt
+            #qwt
     )
 
 endif()
