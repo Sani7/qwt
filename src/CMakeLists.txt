@@ -9,6 +9,7 @@ set_target_properties(
         AUTOMOC ON
         AUTORCC ON
 )
+set_property(TARGET qwt PROPERTY POSITION_INDEPENDENT_CODE ON)
 target_compile_definitions(qwt
     PRIVATE
     "QWT_MOC_INCLUDE"
