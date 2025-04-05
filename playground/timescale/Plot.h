@@ -6,6 +6,7 @@
 #pragma once
 
 #include <QwtPlot>
+#include <QTimeZone>
 
 class Settings;
 
@@ -20,6 +21,6 @@ class Plot : public QwtPlot
     void applySettings( const Settings& );
 
   private:
-    void initAxis( int axis, const QString& title, Qt::TimeSpec );
+    void initAxis( int axis, const QString& title, QTimeZone );
     void applyAxisSettings( int axis, const Settings& );
 };

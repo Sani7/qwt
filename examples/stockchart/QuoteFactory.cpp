@@ -833,7 +833,7 @@ QVector< QwtOHLCSample > QuoteFactory::samples2010( Stock stock )
     QVector< QwtOHLCSample > samples;
     samples.reserve( numSamples );
 
-    QDateTime year2010( QDate( 2010, 1, 1 ), QTime( 0, 0 ), Qt::UTC );
+    QDateTime year2010( QDate( 2010, 1, 1 ), QTime( 0, 0 ), QTimeZone::UTC );
 
     for ( int i = 0; i < numSamples; i++ )
     {

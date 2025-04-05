@@ -23,9 +23,9 @@ Plot::Plot( QWidget* parent )
 
     plotLayout()->setAlignCanvasToScales( true );
 
-    initAxis( QwtAxis::YLeft, "Local Time", Qt::LocalTime );
+    initAxis( QwtAxis::YLeft, "Local Time", QTimeZone::LocalTime );
     initAxis( QwtAxis::YRight,
-        "Coordinated Universal Time ( UTC )", Qt::UTC );
+        "Coordinated Universal Time ( UTC )", QTimeZone::UTC );
 
     QwtPlotPanner* panner = new QwtPlotPanner( canvas() );
     QwtPlotMagnifier* magnifier = new QwtPlotMagnifier( canvas() );
@@ -51,12 +51,12 @@ Plot::Plot( QWidget* parent )
 }
 
 void Plot::initAxis( int axis,
-    const QString& title, Qt::TimeSpec timeSpec )
+    const QString& title, QTimeZone timeZone )
 {
     setAxisTitle( axis, title );
 
-    QwtDateScaleDraw* scaleDraw = new QwtDateScaleDraw( timeSpec );
-    QwtDateScaleEngine* scaleEngine = new QwtDateScaleEngine( timeSpec );
+    QwtDateScaleDraw* scaleDraw = new QwtDateScaleDraw( timeZone );
+    QwtDateScaleEngine* scaleEngine = new QwtDateScaleEngine( timeZone );
 
 #if 0
     if ( timeSpec == Qt::LocalTime )

@@ -58,8 +58,8 @@ namespace
     class DateScaleDraw : public QwtDateScaleDraw
     {
       public:
-        DateScaleDraw( Qt::TimeSpec timeSpec )
-            : QwtDateScaleDraw( timeSpec )
+        DateScaleDraw( QTimeZone timeZone )
+            : QwtDateScaleDraw( timeZone )
         {
             // as we have dates from 2010 only we use
             // format strings without the year
@@ -98,8 +98,8 @@ namespace
 
         void setInterval( const QDate& date1, const QDate& date2 )
         {
-            const QDateTime dt1( date1, QTime(), Qt::UTC );
-            const QDateTime dt2( date2, QTime(), Qt::UTC );
+            const QDateTime dt1( date1, QTime(), QTimeZone::UTC );
+            const QDateTime dt2( date2, QTime(), QTimeZone::UTC );
 
             QwtPlotZoneItem::setInterval( QwtDate::toDouble( dt1 ),
                 QwtDate::toDouble( dt2 ) );
@@ -112,8 +112,8 @@ Plot::Plot( QWidget* parent )
 {
     setTitle( "Trading Chart" );
 
-    QwtDateScaleDraw* scaleDraw = new DateScaleDraw( Qt::UTC );
-    QwtDateScaleEngine* scaleEngine = new QwtDateScaleEngine( Qt::UTC );
+    QwtDateScaleDraw* scaleDraw = new DateScaleDraw( QTimeZone::UTC );
+    QwtDateScaleEngine* scaleEngine = new QwtDateScaleEngine( QTimeZone::UTC );
 
     setAxisTitle( QwtAxis::XBottom, QString( "2010" ) );
     setAxisScaleDraw( QwtAxis::XBottom, scaleDraw );
