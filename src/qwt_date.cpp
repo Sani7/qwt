@@ -132,7 +132,7 @@ static inline void qwtFloorTime(
     const Qt::TimeSpec timeSpec = dt.timeSpec();
 
     if ( timeSpec == Qt::LocalTime )
-        dt = dt.toTimeSpec( Qt::UTC );
+        dt = dt.toTimeZone(QTimeZone::UTC);
 
     const QTime t = dt.time();
     switch( intervalType )
@@ -157,13 +157,13 @@ static inline void qwtFloorTime(
     }
 
     if ( timeSpec == Qt::LocalTime )
-        dt = dt.toTimeSpec( Qt::LocalTime );
+        dt = dt.toTimeZone( QTimeZone::LocalTime );
 }
 
 static inline QDateTime qwtToTimeSpec(
-    const QDateTime& dt, Qt::TimeSpec spec )
+    const QDateTime& dt, QTimeZone spec )
 {
-    if ( dt.timeSpec() == spec )
+    if ( dt.timeZone() == spec )
         return dt;
 
     const qint64 jd = dt.date().toJulianDay();
@@ -175,11 +175,12 @@ static inline QDateTime qwtToTimeSpec(
         // for those dates
 
         QDateTime dt2 = dt;
-        dt2.setTimeSpec( spec );
+        dt2.setTimeZone( spec );
         return dt2;
     }
-
-    return dt.toTimeSpec( spec );
+    QDateTime dt_copy = dt;
+    dt_copy.setTimeZone( spec );
+    return dt_copy;
 }
 
 #if 0
@@ -258,7 +259,7 @@ static inline QDate qwtToDate( int year, int month = 1, int day = 1 )
    \sa toDouble(), QDateTime::setMSecsSinceEpoch()
    \note The return datetime for Qt::OffsetFromUTC will be Qt::UTC
  */
-QDateTime QwtDate::toDateTime( double value, Qt::TimeSpec timeSpec )
+QDateTime QwtDate::toDateTime( double value, QTimeZone timeSpec )
 {
     const int msecsPerDay = 86400000;
 
@@ -277,9 +278,9 @@ QDateTime QwtDate::toDateTime( double value, Qt::TimeSpec timeSpec )
 
     static const QTime timeNull( 0, 0, 0, 0 );
 
-    QDateTime dt( d, timeNull.addMSecs( msecs ), Qt::UTC );
+    QDateTime dt( d, timeNull.addMSecs( msecs ), QTimeZone::UTC );
 
-    if ( timeSpec == Qt::LocalTime )
+    if ( timeSpec == QTimeZone::LocalTime )
         dt = qwtToTimeSpec( dt, timeSpec );
 
     return dt;
@@ -299,7 +300,7 @@ double QwtDate::toDouble( const QDateTime& dateTime )
 {
     const int msecsPerDay = 86400000;
 
-    const QDateTime dt = qwtToTimeSpec( dateTime, Qt::UTC );
+    const QDateTime dt = qwtToTimeSpec( dateTime, QTimeZone::UTC );
 
     const double days = dt.date().toJulianDay() - QwtDate::JulianDayForEpoch;
 
@@ -653,7 +654,7 @@ int QwtDate::utcOffset( const QDateTime& dateTime )
         }
         default:
         {
-            const QDateTime dt1( dateTime.date(), dateTime.time(), Qt::UTC );
+            const QDateTime dt1( dateTime.date(), dateTime.time(), QTimeZone::UTC );
             seconds = dateTime.secsTo( dt1 );
         }
     }

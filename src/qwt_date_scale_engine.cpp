@@ -717,15 +717,15 @@ static QwtScaleDiv qwtDivideToYears(
 class QwtDateScaleEngine::PrivateData
 {
   public:
-    explicit PrivateData( Qt::TimeSpec spec )
-        : timeSpec( spec )
+    explicit PrivateData( QTimeZone zone )
+        : timeZone( zone )
         , utcOffset( 0 )
         , week0Type( QwtDate::FirstThursday )
         , maxWeeks( 4 )
     {
     }
 
-    Qt::TimeSpec timeSpec;
+    QTimeZone timeZone;
     int utcOffset;
     QwtDate::Week0Type week0Type;
     int maxWeeks;
@@ -744,10 +744,10 @@ class QwtDateScaleEngine::PrivateData
 
    \sa setTimeSpec(), setMaxWeeks(), setWeek0Type()
  */
-QwtDateScaleEngine::QwtDateScaleEngine( Qt::TimeSpec timeSpec )
+QwtDateScaleEngine::QwtDateScaleEngine( QTimeZone timeZone )
     : QwtLinearScaleEngine( 10 )
 {
-    m_data = new PrivateData( timeSpec );
+    m_data = new PrivateData( timeZone );
 }
 
 //! Destructor
@@ -762,18 +762,18 @@ QwtDateScaleEngine::~QwtDateScaleEngine()
    \param timeSpec Time specification
    \sa timeSpec(), setUtcOffset(), toDateTime()
  */
-void QwtDateScaleEngine::setTimeSpec( Qt::TimeSpec timeSpec )
+void QwtDateScaleEngine::setTimeZone( QTimeZone timeZone )
 {
-    m_data->timeSpec = timeSpec;
+    m_data->timeZone = timeZone;
 }
 
 /*!
    \return Time specification used by the engine
    \sa setTimeSpec(), utcOffset(), toDateTime()
  */
-Qt::TimeSpec QwtDateScaleEngine::timeSpec() const
+QTimeZone QwtDateScaleEngine::timeZone() const
 {
-    return m_data->timeSpec;
+    return m_data->timeZone;
 }
 
 /*!
@@ -1116,7 +1116,7 @@ QDateTime QwtDateScaleEngine::alignDate(
     if ( dateTime.timeSpec() == Qt::OffsetFromUTC )
     {
 #if QT_VERSION >= 0x050200
-        dt.setOffsetFromUtc( 0 );
+        dt.setTimeZone( QTimeZone::UTC );
 #else
         dt.setUtcOffset( 0 );
 #endif
@@ -1277,7 +1277,9 @@ QDateTime QwtDateScaleEngine::alignDate(
 
     if ( dateTime.timeSpec() == Qt::OffsetFromUTC )
     {
-#if QT_VERSION >= 0x050200
+#if QT_VERSION >= 0x060000
+    dt.setTimeZone( QTimeZone(dateTime.offsetFromUtc()) );
+#elif QT_VERSION >= 0x050200
         dt.setOffsetFromUtc( dateTime.offsetFromUtc() );
 #else
         dt.setUtcOffset( dateTime.utcOffset() );
@@ -1297,19 +1299,22 @@ QDateTime QwtDateScaleEngine::alignDate(
  */
 QDateTime QwtDateScaleEngine::toDateTime( double value ) const
 {
-    QDateTime dt = QwtDate::toDateTime( value, m_data->timeSpec );
+    QDateTime dt = QwtDate::toDateTime( value, m_data->timeZone );
     if ( !dt.isValid() )
     {
         const QDate date = ( value <= 0.0 )
             ? QwtDate::minDate() : QwtDate::maxDate();
 
-        dt = QDateTime( date, QTime( 0, 0 ), m_data->timeSpec );
+        dt = QDateTime( date, QTime( 0, 0 ), m_data->timeZone );
     }
 
-    if ( m_data->timeSpec == Qt::OffsetFromUTC )
+    if ( m_data->timeZone == QTimeZone::LocalTime )
     {
         dt = dt.addSecs( m_data->utcOffset );
-#if QT_VERSION >= 0x050200
+
+#if QT_VERSION >= 0x060000
+        dt.setTimeZone( QTimeZone(m_data->utcOffset) );
+#elif QT_VERSION >= 0x050200
         dt.setOffsetFromUtc( m_data->utcOffset );
 #else
         dt.setUtcOffset( m_data->utcOffset );

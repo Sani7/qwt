@@ -13,8 +13,8 @@
 class QwtDateScaleDraw::PrivateData
 {
   public:
-    explicit PrivateData( Qt::TimeSpec spec )
-        : timeSpec( spec )
+    explicit PrivateData( QTimeZone zone )
+        : timeZone( zone )
         , utcOffset( 0 )
         , week0Type( QwtDate::FirstThursday )
     {
@@ -28,7 +28,7 @@ class QwtDateScaleDraw::PrivateData
         dateFormats[ QwtDate::Year ] = "yyyy";
     }
 
-    Qt::TimeSpec timeSpec;
+    QTimeZone timeZone;
     int utcOffset;
     QwtDate::Week0Type week0Type;
     QString dateFormats[ QwtDate::Year + 1 ];
@@ -45,9 +45,9 @@ class QwtDateScaleDraw::PrivateData
 
    \sa setTimeSpec(), setWeek0Type()
  */
-QwtDateScaleDraw::QwtDateScaleDraw( Qt::TimeSpec timeSpec )
+QwtDateScaleDraw::QwtDateScaleDraw( QTimeZone timeZone )
 {
-    m_data = new PrivateData( timeSpec );
+    m_data = new PrivateData( timeZone );
 }
 
 //! Destructor
@@ -62,18 +62,18 @@ QwtDateScaleDraw::~QwtDateScaleDraw()
    \param timeSpec Time specification
    \sa timeSpec(), setUtcOffset(), toDateTime()
  */
-void QwtDateScaleDraw::setTimeSpec( Qt::TimeSpec timeSpec )
+void QwtDateScaleDraw::setTimeZone( QTimeZone timeZone )
 {
-    m_data->timeSpec = timeSpec;
+    m_data->timeZone = timeZone;
 }
 
 /*!
    \return Time specification used for the tick labels
    \sa setTimeSpec(), utcOffset(), toDateTime()
  */
-Qt::TimeSpec QwtDateScaleDraw::timeSpec() const
+QTimeZone QwtDateScaleDraw::timeZone() const
 {
-    return m_data->timeSpec;
+    return m_data->timeZone;
 }
 
 /*!
@@ -268,11 +268,13 @@ QwtDate::IntervalType QwtDateScaleDraw::intervalType(
  */
 QDateTime QwtDateScaleDraw::toDateTime( double value ) const
 {
-    QDateTime dt = QwtDate::toDateTime( value, m_data->timeSpec );
-    if ( m_data->timeSpec == Qt::OffsetFromUTC )
+    QDateTime dt = QwtDate::toDateTime( value, m_data->timeZone );
+    if ( m_data->timeZone == QTimeZone::LocalTime )
     {
         dt = dt.addSecs( m_data->utcOffset );
-#if QT_VERSION >= 0x050200
+#if QT_VERSION >= 0x060000
+        dt.setTimeZone( QTimeZone(m_data->utcOffset) );
+#elif QT_VERSION >= 0x050200
         dt.setOffsetFromUtc( m_data->utcOffset );
 #else
         dt.setUtcOffset( m_data->utcOffset );

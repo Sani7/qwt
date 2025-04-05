@@ -12,6 +12,7 @@
 
 #include "qwt_global.h"
 #include <qdatetime.h>
+#include <qtimezone.h>
 
 /*!
    \brief A collection of methods around date/time values
@@ -109,7 +110,7 @@ class QWT_EXPORT QwtDate
     static QDate maxDate();
 
     static QDateTime toDateTime( double value,
-        Qt::TimeSpec = Qt::UTC );
+        QTimeZone = QTimeZone::UTC );
 
     static double toDouble( const QDateTime& );
 

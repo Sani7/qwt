@@ -42,11 +42,11 @@
 class QWT_EXPORT QwtDateScaleEngine : public QwtLinearScaleEngine
 {
   public:
-    explicit QwtDateScaleEngine( Qt::TimeSpec = Qt::LocalTime );
+    explicit QwtDateScaleEngine( QTimeZone = QTimeZone::LocalTime );
     virtual ~QwtDateScaleEngine();
 
-    void setTimeSpec( Qt::TimeSpec );
-    Qt::TimeSpec timeSpec() const;
+    void setTimeZone( QTimeZone );
+    QTimeZone timeZone() const;
 
     void setUtcOffset( int seconds );
     int utcOffset() const;

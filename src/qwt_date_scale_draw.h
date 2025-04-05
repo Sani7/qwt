@@ -52,14 +52,14 @@
 class QWT_EXPORT QwtDateScaleDraw : public QwtScaleDraw
 {
   public:
-    explicit QwtDateScaleDraw( Qt::TimeSpec = Qt::LocalTime );
+    explicit QwtDateScaleDraw( QTimeZone timeZone = QTimeZone::LocalTime );
     virtual ~QwtDateScaleDraw();
 
     void setDateFormat( QwtDate::IntervalType, const QString& );
     QString dateFormat( QwtDate::IntervalType ) const;
 
-    void setTimeSpec( Qt::TimeSpec );
-    Qt::TimeSpec timeSpec() const;
+    void setTimeZone( QTimeZone );
+    QTimeZone timeZone() const;
 
     void setUtcOffset( int seconds );
     int utcOffset() const;
