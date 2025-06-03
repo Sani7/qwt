@@ -24,6 +24,24 @@ target_include_directories(qwt
 
 file(GLOB_RECURSE QWT_SOURCES "*.cpp")
 file(GLOB_RECURSE QWT_HEADERS "*.hpp" "*.h")
+
+if (EMSCRIPTEN)
+  set(EXCLUDED_FILES
+      "${CMAKE_CURRENT_SOURCE_DIR}/qwt_date_scale_draw.cpp"
+      "${CMAKE_CURRENT_SOURCE_DIR}/qwt_date_scale_draw.h"
+      "${CMAKE_CURRENT_SOURCE_DIR}/qwt_date_scale_engine.cpp"
+      "${CMAKE_CURRENT_SOURCE_DIR}/qwt_date_scale_engine.h"
+      "${CMAKE_CURRENT_SOURCE_DIR}/qwt_date.cpp"
+      "${CMAKE_CURRENT_SOURCE_DIR}/qwt_date.h"
+  )
+
+  # Remove them from the list
+  foreach(file_to_exclude IN LISTS EXCLUDED_FILES)
+    list(REMOVE_ITEM QWT_SOURCES "${file_to_exclude}")
+    list(REMOVE_ITEM QWT_HEADERS "${file_to_exclude}")
+  endforeach()
+endif()
+
 target_sources(qwt
   PRIVATE
   ${QWT_SOURCES}
