@@ -19,6 +19,7 @@ target_compile_definitions(qwt
 target_include_directories(qwt
   INTERFACE
   ${CMAKE_CURRENT_LIST_DIR}/
+  ${CMAKE_CURRENT_LIST_DIR}/../classincludes
 #  ${PROJECT_BINARY_DIR}/
 )
 
@@ -49,13 +50,11 @@ target_sources(qwt
 )
 
 target_link_libraries(qwt
-    PUBLIC
-
-    PRIVATE
-        Qt6::Core
-        Qt6::OpenGLWidgets
-        Qt6::Widgets
-        Qt6::Concurrent
-        Qt6::PrintSupport
-        Qt6::Svg
+  PUBLIC
+    Qt6::Core
+    Qt6::OpenGLWidgets
+    Qt6::Widgets
+    Qt6::Concurrent
+    Qt6::PrintSupport
+    Qt6::Svg
 )

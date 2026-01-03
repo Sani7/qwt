@@ -8,7 +8,7 @@ and much more.
 
 Qwt is officialy hosted at http://qwt.sf.net, the cmake version at https://github.com/Sani7/qwt
 
-# Installation
+# Usage
 You can add qwt as a submodule to your git project and using:
 ```cmake
 add_subdirectory(${QWT_FOLDER_LOCATION})
